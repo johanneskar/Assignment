@@ -1,0 +1,38 @@
+# Graph 1
+import pandas as pd
+import matplotlib.pyplot as plt
+import numpy as np
+%reload_ext google.colab.data_table
+tables = pd.read_html("https://en.wikipedia.org/wiki/List_of_countries_by_carbon_dioxide_emissions")
+countries = tables[1]
+countries.columns =['country', '1990', '2005', '2017', '2017(%world)', '2017vs1990', 'tCO2/km2/yr', 'tCO2/cap/yr', 'TotalincLUCF', 'TotalexcLUCF']
+countries = countries[3:]
+countries = countries.drop([67])
+top_5 = countries.sort_values(by=['2017'])[-6:-1]
+
+fig = plt.figure()
+fig, ax = plt.subplots()
+x = ["1990", "2005", "2017"]
+y = top_5.loc[:, "country":"2017"]
+y_name = y.set_index("country")
+
+y1 = y_name.loc["Germany"]
+y2 = y_name.loc["Japan"]
+y3 = y_name.loc["Russia"]
+y4 = y_name.loc["India"]
+y5 = y_name.loc["United States"]
+
+ax.plot(x, y1, label="Germany")
+ax.plot(x, y2, label="Japan")
+ax.plot(x, y3, label="Russia")
+ax.plot(x, y4, label="India")
+ax.plot(x, y5, label="United States")
+ax.legend()
+
+ax.set_title("Graph 1: CO2 of the bigger countries")
+ax.grid(True)
+ax.set_xlabel("year")
+ax.set_ylabel("fossil CO2 emissions in Mt CO2")
+
+
+
