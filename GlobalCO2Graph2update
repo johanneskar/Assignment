@@ -1,0 +1,42 @@
+# Graph 2 update
+import pandas as pd
+import matplotlib.pyplot as plt
+import numpy as np
+%reload_ext google.colab.data_table
+tables = pd.read_html("https://en.wikipedia.org/wiki/List_of_countries_by_carbon_dioxide_emissions")
+countries = tables[1]
+countries.columns =['country', '1990', '2005', '2017', '2017(%world)', '2017vs1990', 'tCO2/km2/yr', 'tCO2/cap/yr', 'TotalincLUCF', 'TotalexcLUCF']
+countries = countries[3:]
+countries = countries.drop([67])
+countries = countries.loc[:, "country":"2017"]
+countries["relative change 1990"] = countries["1990"]/countries["1990"]*100
+countries["relative change 2005"] = countries["2005"]/countries["1990"]*100
+countries["relative change 2017"] = countries["2017"]/countries["1990"]*100
+countries = countries.sort_values(by=['relative change 2017'])
+countries_t3b3 = countries.loc[[10, 128, 199, 17, 144, 207]]
+
+fig = plt.figure()
+fig, ax = plt.subplots()
+
+
+x = ["1990", "2005", "2017"]
+y1 = countries_t3b3.loc[10,["relative change 1990", "relative change 2005", "relative change 2017"]]
+y2 = countries_t3b3.loc[128,["relative change 1990", "relative change 2005", "relative change 2017"]]
+y3 = countries_t3b3.loc[199,["relative change 1990", "relative change 2005", "relative change 2017"]]
+y4 = countries_t3b3.loc[17,["relative change 1990", "relative change 2005", "relative change 2017"]]
+y5 = countries_t3b3.loc[144,["relative change 1990", "relative change 2005", "relative change 2017"]]
+y6 = countries_t3b3.loc[207,["relative change 1990", "relative change 2005", "relative change 2017"]]
+
+
+ax.plot(x, y1, label="Armenia")
+ax.plot(x, y2, label="Moldovia")
+ax.plot(x, y3, label="Ukraine")
+ax.plot(x, y4, label="Bangladesh")
+ax.plot(x, y5, label="Oman")
+ax.plot(x, y6, label="Vietnam")
+ax.legend()
+
+ax.set_title("Worst and best changers with at least 5 Mt of CO2 emissions in 1990")
+ax.grid(True)
+ax.set_xlabel("year")
+ax.set_ylabel("relative amount of CO2 emitted (1990 = 100%)")
